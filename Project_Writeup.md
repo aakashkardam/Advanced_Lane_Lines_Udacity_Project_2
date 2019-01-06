@@ -47,17 +47,29 @@ Fig. Image after correcting for distortion using the distortion coefficients obt
 
 #### 1. Provide an example of a distortion-corrected image.
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images shown below:
+I used the same coefficients for applying distortion correction to the test images. An example is shown below:
 ![Distortion Correction Test Image 1](./output_images/Camera_Calibration_test_image_1.jpg)
 Fig. Distortion correction applied to the test image 1.
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+In the same jupyter-notebook (P2.ipynb), I implemented the color transform and gradient under the heading "Color transform and gradient". I have implemented this using the helper functions `abs_sobel_thresh`,`mag_thresh`,`direc_thresh`,`S_thresh` to obtain sobel_x_binary, sobel_y_binary, magnitude_binary, directional_binary, hls_s_binary images. I also use `region_of_interest` function to focus only on the likely region of the image [just like in project 1](https://github.com/aakashkardam/Finding_Lane_Lines_Udacity_Project_1). 
+```python
+vertices=np.array([[(550,470),
+                      (760,470),
+                      (1150,720),
+                      (200,720)]], dtype=np.int32) 
+    masked_image = region_of_interest(COMBINE_with_HLS_THRESH, vertices) # masked image obtained
+```
+After obtaining all the binary images, I combine them together using the `combined_threshold` function as shown in the images below:
 
 ![Sobel X and Y Thresholds](./output_images/Sobel_X_and_Y_test_image_1.jpg)
+Fig. Sobel X (left) and Sobel Y (right) gradient thresholded binary image using the threshold range of 20 to 100. 
 ![Directional and Magnitudinal Thresholds](./output_images/Directional_and_Magnitudinal_Binary_test_image_1.jpg)
+Fig. Directional (left) and Magnitudinal (right) gradient threshold binary image using threshold range of (0.7,1.3) for directional and (20,100) for magnitudinal gradient. 
 ![S Threshold and Combined All Thresholds](./output_images/S_Threshold_and_combining_all_test_image_1.jpg)
+Fig. Image transformed to HLS color space and a S channel thresholded binary image using the range (155,255) on the left and then combining all the binary images (right).
+I use the combination of all the thresholds for my further analysis.
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
