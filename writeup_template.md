@@ -17,6 +17,7 @@ The goals / steps of this project are the following:
 * Warp the detected lane boundaries back onto the original image.
 * Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
+[image1]: ./output_images/Camera_Calibration.jpg "Distortion Correction"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -40,7 +41,7 @@ I used two helper functions to achieve this task described in the second cell, n
 
 After obtainig the `img_points` and `obj_points`, I use the helper function `calibrate_camera` to get the camera matrix (mtx) and the distortion coefficient (dist). I apply this distortion correction to the image using the `correct_for_distortion` function to obtain the undistorted image. A sample result in included in the writeup below:
 
-![alt text][output_images/Camera_Calibration.jpg]
+![alt text][Camera_Calibration.jpg]
 
 ### Pipeline (single images)
 
