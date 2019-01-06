@@ -17,15 +17,6 @@ The goals / steps of this project are the following:
 * Warp the detected lane boundaries back onto the original image.
 * Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
-[//]: # (Image References)
-
-[image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -43,13 +34,13 @@ You're reading it!
 
 #### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-The code for this step is contained in the first code cell of the IPython notebook located in "./examples/example.ipynb" (or in lines # through # of the file called `some_file.py`).  
+The code for this step is contained in the second and third code cell under the heading "Camera Calibration" of the jupyter-notebook titled `P2.ipynb` located in the CarND-Advanced-Lane-Lines repository. 
 
-I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
+I used two helper functions to achieve this task described in the second cell, namely `calibrate_camera` and `correct_for_distortion`. In the next cell I start by defining the number of corners in x and y direction in the image. As suggested in the project statement I use the values 9 and 6 for x and y direction respectively. Then I prepare "object points" which will be the (x, y, z) coordinates of the chessboard corners in the real world. Assuming the chessboard is fixed on the (x,y) plane, I can put the z variable to be '0' such that the object points are the same for each calibration image. Thus, `objp` is just a replicated array of coordinates, and `obj_points` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `img_points` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
 
-I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
+After obtainig the `img_points` and `obj_points`, I use the helper function `calibrate_camera` to get the camera matrix (mtx) and the distortion coefficient (dist). I apply this distortion correction to the image using the `correct_for_distortion` function to obtain the undistorted image. A sample result in included in the writeup below:
 
-![alt text][image1]
+![alt text][output_images/Camera_Calibration.jpg]
 
 ### Pipeline (single images)
 
