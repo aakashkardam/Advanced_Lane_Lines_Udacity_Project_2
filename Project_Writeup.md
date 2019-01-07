@@ -163,3 +163,13 @@ Here's a [link to my video result](./output_images/project_video_output.mp4)
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+
+Every step of the process is important but in particular to be able to adress the challenging videos in the project and detect lane lines in them the step to generate the binary thresholded images requirea fine tuning. It requires involved work to find out the best thresholding range and the combination of the thresholds to use for the best result. I had used a variety of combinations to see what gives the best result. I would like to improve this step in order to detect the lane lines in the challenge videos.
+
+During the step of polyfitting a polynomial. We collect the lane pixels that we found in the window. If the first window itself doesn't have any white pixels in it. The pipeline will likely fail, since the lane lines are often not continuous but broken. This can be addressed by imporoving the thresholding techniques to locate enough pixels in the first window when implementing the window search method. 
+
+Also, the pipeline expects to find lines in every single frame of the video it processes. IF any frame doesn't have the lane lines, it might not work. The future improvements in the pipeline to counter this situation is to store the parameters that define the lane lines in the previous frames of the video and use them to generate lines in the frame which doesn't have any lane lines in it. Storing a moving average of the lane lines would be a good addition to the pipeline in the near future.
+
+There can be small sanity check that can further improve the pipeline. For example a sanity check to confirm if the lane lines detected are not absurd and the values make sense in the real world. 
+
+As such testing the pipeline with extreme cases would always provide good insights as to what can be improved.
