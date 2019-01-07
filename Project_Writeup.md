@@ -63,7 +63,7 @@ Fig. Directional (left) and Magnitudinal (right) gradient threshold binary image
 ![S Threshold and Combined All Thresholds](./output_images/S_Threshold_and_combining_all_test_image_3.jpg)
 Fig. Image transformed to HLS color space and a S channel thresholded binary image using the range (155,255) on the left and then combining all the binary images (right).
 
-I also played around `region_of_interest` function to focus only on the region likely to conatain the lane lines [just like in project 1](https://github.com/aakashkardam/Finding_Lane_Lines_Udacity_Project_1). I use the following coordinates for the region masking.
+I also played around with `region_of_interest` function to focus only on the region likely to contain the lane lines [just like in project 1](https://github.com/aakashkardam/Finding_Lane_Lines_Udacity_Project_1). I use the following coordinates for the region masking.
 ```python
 vertices=np.array([[(550,470),
                       (760,470),
@@ -103,23 +103,31 @@ This resulted in the following source and destination points:
 | 695, 460      | 960, 0        |
 
 The warped image is shown below:
-![Perspective Transform](./output_images/Perspective_Transform_Combined_All_test_image_3.jpg)
 Fig. Warped Binary Image
+![Perspective Transform](./output_images/Perspective_Transform_Combined_All_test_image_3.jpg)
 I verified that my perspective transform was working as expected by plotting the warped and the original image together using the `src` and `dst` points above to verify that the lines appear parallel in the warped image.
 ![Verifying Perspective Transform](./output_images/Verifying_Perspective_Transform.jpg)
-
+Fig. Original Image(left) and the warped image using perspective transform (right).
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+After perspective transform, the next step is to locate the pixels in the image that form the lane lines. This is achieved in a number of steps. First I plotted the histogram(of only lower half) of the `binary_warped_image` obtained in the previous step to find the base locations for the right and the left lane. The two peaks in the histogram respectively gives the left and the right lane starting positions at the bottom of the image.
 
+After finding the starting position. I used the recommended "Sliding Window" method in order to locate the pixels that form the lane lines. In this method, I use a window centered around the starting positions found by the histogram peaks and with a margin of 100 pixels on either side and a specified window height of `image_shape[0]/9`. I count the number of activated pixels (white pixels in the image) in the window and if it is greater than a specified amount of `minipix` (minimum no. of pixels), I take the mean of the x locations of the pixels in that window to position the lane lines. I traverse from the bottom of the image to the top of the image with the same window size and update the position of the lines based on the activated pixels I see. Everytime appending these pixels in the separate lists for the left and thr right lane lines. This procedure is shown below where the green rectangles specify the windows used for search the pixels.
 ![Polyfitted Lane Lines](./output_images/Polyfitted_Lane_Lines_test_image_3.jpg)
-![Polyfitted Lane Lines](./output_images/Lane_Lines_Window_test_image_3.jpg)
+Fig. Polynomial of degree 2 fitted to show the lane lines detected based on pixels found using the sliding window method.
 
+The implementation of the method described above is done through two helper functions, namely `hist` and `find_lane_line_pixels` which accepts an image `i` and is implemented in the code cell under the headings "Histogram: Finding the base location of the lane lines in the image" and "Sliding Window: To find the pixels that form the lane lines".
+
+Once I have collected the pixels that form the two lane lines. I use a 2nd order polynomial fit using `fit_poly` function. Another image is shown below which uses the lane lines jsut after the polynomial fit to the activated pixesl obtained in the first sliding window and then searching around the lane lines which is in some sense a more informed search rather than repeating the whole process again.
+![Polyfitted Lane Lines](./output_images/Lane_Lines_Window_test_image_3.jpg)
+Fig. Lane Lines detected without repeating the sliding window method.
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+After detecting the lane lines. The next step is to find the radius of curvature of the lines and find the location of the vehicle/car with respect to the lane lines. This is implemented under the headings "Radius of Curvature : Pixel Radius" and "Radius of Curvature : Real Radius".
+
+I used [this link](https://www.intmath.com/applications-differentiation/8-radius-curvature.php) to compute the radius of curvature. Essentially what is required here is to use the expression directly and fill in the required values for `y_Eval` (which is the y co-ordinate of the location you want to know the curvature at). I have use the value to be the y value at bottom of the image.
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
