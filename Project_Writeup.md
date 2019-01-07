@@ -103,9 +103,12 @@ This resulted in the following source and destination points:
 | 695, 460      | 960, 0        |
 
 The warped image is shown below:
+
 ![Perspective Transform](./output_images/Perspective_Transform_Combined_All_test_image_3.jpg)
 Fig. Warped Binary Image
+
 I verified that my perspective transform was working as expected by plotting the warped and the original image together using the `src` and `dst` points above to verify that the lines appear parallel in the warped image.
+
 ![Verifying Perspective Transform](./output_images/Verifying_Perspective_Transform.jpg)
 Fig. Original Image(left) and the warped image using perspective transform (right).
 
@@ -114,6 +117,7 @@ Fig. Original Image(left) and the warped image using perspective transform (righ
 After perspective transform, the next step is to locate the pixels in the image that form the lane lines. This is achieved in a number of steps. First I plotted the histogram(of only lower half) of the `binary_warped_image` obtained in the previous step to find the base locations for the right and the left lane. The two peaks in the histogram respectively gives the left and the right lane starting positions at the bottom of the image.
 
 After finding the starting position. I used the recommended "Sliding Window" method in order to locate the pixels that form the lane lines. In this method, I use a window centered around the starting positions found by the histogram peaks and with a margin of 100 pixels on either side and a specified window height of `image_shape[0]/9`. I count the number of activated pixels (white pixels in the image) in the window and if it is greater than a specified amount of `minipix` (minimum no. of pixels), I take the mean of the x locations of the pixels in that window to position the lane lines. I traverse from the bottom of the image to the top of the image with the same window size and update the position of the lines based on the activated pixels I see. Everytime appending these pixels in the separate lists for the left and thr right lane lines. This procedure is shown below where the green rectangles specify the windows used for search the pixels.
+
 ![Polyfitted Lane Lines](./output_images/Polyfitted_Lane_Lines_test_image_3.jpg)
 Fig. Polynomial of degree 2 fitted to show the lane lines detected based on pixels found using the sliding window method.
 
@@ -128,7 +132,12 @@ Fig. Lane Lines detected without repeating the sliding window method.
 
 After detecting the lane lines. The next step is to find the radius of curvature of the lines and find the location of the vehicle/car with respect to the lane lines. This is implemented under the headings "Radius of Curvature : Pixel Radius" and "Radius of Curvature : Real Radius".
 
-I used [this link](https://www.intmath.com/applications-differentiation/8-radius-curvature.php) to compute the radius of curvature. Essentially what is required here is to use the expression directly and fill in the required values for `y_Eval` (which is the y co-ordinate of the location you want to know the curvature at). I have use the value to be the y value at bottom of the image.
+I used [this link](https://www.intmath.com/applications-differentiation/8-radius-curvature.php) to compute the radius of curvature. Essentially what is required here is to use the expression directly and fill in the required values for `y_Eval` (which is the y co-ordinate of the location you want to know the curvature at). I have use the value to be the y value at bottom of the image. This is implemented in both `measure_curvature_pixels` and`measure_curvature_real` with the difference being the former gives you the radius values in pixels while the latter gives you the radius values in meters. I use a conversion factor of meters per pixel in x and y direction as recommended in the lecture and also described below.
+```python
+ym_per_pix = 30/720 # meters per pixel in y dimension
+xm_per_pix = 3.7/700 # meters per pixel in x dimension
+```
+Up untill this point, we have the location of the lane lines in the entire image, the radius of curvature of the lane lines at the bottom of the image. USing these values we can compute the position of the car by taking the average of the positions of the lane lines and call it `lane_center_bottom_in_pixels` for pixel values and `lane_center_bottom_in_meters` for real values. If this value is less than `0` the vehicle/car is to the left and vice versa.
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
