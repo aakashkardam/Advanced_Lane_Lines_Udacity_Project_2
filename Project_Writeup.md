@@ -53,7 +53,17 @@ Fig. Distortion correction applied to the test image 1.
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-In the same jupyter-notebook (P2.ipynb), I implemented the color transform and gradient under the heading "Color transform and gradient". I have implemented this using the helper functions `abs_sobel_thresh`,`mag_thresh`,`direc_thresh`,`S_thresh` to obtain sobel_x_binary, sobel_y_binary, magnitude_binary, directional_binary, hls_s_binary images. I also use `region_of_interest` function to focus only on the likely region of the image [just like in project 1](https://github.com/aakashkardam/Finding_Lane_Lines_Udacity_Project_1). 
+In the same jupyter-notebook (P2.ipynb), I implemented the color transform and gradient under the heading "Color transform and gradient". I have implemented this using the helper functions `abs_sobel_thresh`,`mag_thresh`,`direc_thresh`,`S_thresh` to obtain sobel_x_binary, sobel_y_binary, magnitude_binary, directional_binary, hls_s_binary images respectively.
+
+After obtaining all the binary images, I combine them together using the `combined_threshold` function as shown in the images below:
+![Sobel X and Y Thresholds](./output_images/Sobel_X_and_Y_test_image_3.jpg)
+Fig. Sobel X (left) and Sobel Y (right) gradient thresholded binary image using the threshold range of 20 to 100. 
+![Directional and Magnitudinal Thresholds](./output_images/Directional_and_Magnitudinal_Binary_test_image_3.jpg)
+Fig. Directional (left) and Magnitudinal (right) gradient threshold binary image using threshold range of (0.7,1.3) for directional and (20,100) for magnitudinal gradient. 
+![S Threshold and Combined All Thresholds](./output_images/S_Threshold_and_combining_all_test_image_3.jpg)
+Fig. Image transformed to HLS color space and a S channel thresholded binary image using the range (155,255) on the left and then combining all the binary images (right).
+
+I also played around `region_of_interest` function to focus only on the region likely to conatain the lane lines [just like in project 1](https://github.com/aakashkardam/Finding_Lane_Lines_Udacity_Project_1). I use the following coordinates for the region masking.
 ```python
 vertices=np.array([[(550,470),
                       (760,470),
@@ -61,19 +71,14 @@ vertices=np.array([[(550,470),
                       (200,720)]], dtype=np.int32) 
     masked_image = region_of_interest(COMBINE_with_HLS_THRESH, vertices) # masked image obtained
 ```
-After obtaining all the binary images, I combine them together using the `combined_threshold` function as shown in the images below:
+![Experimenting with Region Of Interest](./output_images/S_Threshold_and_combining_all_test_image_3_with_region_of_interest.jpg)
+Fig. Experimenting with region of interest (masking) and combining all thresholded binary images together
 
-![Sobel X and Y Thresholds](./output_images/Sobel_X_and_Y_test_image_1.jpg)
-Fig. Sobel X (left) and Sobel Y (right) gradient thresholded binary image using the threshold range of 20 to 100. 
-![Directional and Magnitudinal Thresholds](./output_images/Directional_and_Magnitudinal_Binary_test_image_1.jpg)
-Fig. Directional (left) and Magnitudinal (right) gradient threshold binary image using threshold range of (0.7,1.3) for directional and (20,100) for magnitudinal gradient. 
-![S Threshold and Combined All Thresholds](./output_images/S_Threshold_and_combining_all_test_image_1.jpg)
-Fig. Image transformed to HLS color space and a S channel thresholded binary image using the range (155,255) on the left and then combining all the binary images (right).
 I use the combination of all the thresholds for my further analysis.
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The perspective transform is implemented under the heading "Next we do perspective transform" in P2.ipynb. The code for my perspective transform includes a helper function called `perspective_transform`, which makes use of the `getPerspectiveTransform`and`warpPerspective` in opencv. The `perspective_transform` function takes as inputs an image (`i`), uses source (`src`) and destination (`dst`) points to do the transform.  I chose the hardcode the source and destination points in the following manner:
 
 ```python
 src = np.float32(
@@ -97,17 +102,17 @@ This resulted in the following source and destination points:
 | 1127, 720     | 960, 720      |
 | 695, 460      | 960, 0        |
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
+I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto the image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-![Perspective Transform](./output_images/Perspective_Transform_Combined_All_test_image_1.jpg)
+![Perspective Transform](./output_images/Perspective_Transform_Combined_All_test_image_3.jpg)
 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
 Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
 
-![Polyfitted Lane Lines](./output_images/Polyfitted_Lane_Lines_test_image_1.jpg)
-![Polyfitted Lane Lines](./output_images/Lane_Lines_Window_test_image_1.jpg)
+![Polyfitted Lane Lines](./output_images/Polyfitted_Lane_Lines_test_image_3.jpg)
+![Polyfitted Lane Lines](./output_images/Lane_Lines_Window_test_image_3.jpg)
 
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
