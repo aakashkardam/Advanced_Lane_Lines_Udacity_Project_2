@@ -102,9 +102,11 @@ This resulted in the following source and destination points:
 | 1127, 720     | 960, 720      |
 | 695, 460      | 960, 0        |
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto the image and its warped counterpart to verify that the lines appear parallel in the warped image.
-
+The warped image is shown below:
 ![Perspective Transform](./output_images/Perspective_Transform_Combined_All_test_image_3.jpg)
+Fig. Warped Binary Image
+I verified that my perspective transform was working as expected by plotting the warped and the original image together using the `src` and `dst` points above to verify that the lines appear parallel in the warped image.
+![Verifying Perspective Transform](./output_images/Verifying_Perspective_Transform.jpg)
 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
