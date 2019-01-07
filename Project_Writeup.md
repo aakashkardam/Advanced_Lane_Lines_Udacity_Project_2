@@ -103,8 +103,8 @@ This resulted in the following source and destination points:
 | 695, 460      | 960, 0        |
 
 The warped image is shown below:
-Fig. Warped Binary Image
 ![Perspective Transform](./output_images/Perspective_Transform_Combined_All_test_image_3.jpg)
+Fig. Warped Binary Image
 I verified that my perspective transform was working as expected by plotting the warped and the original image together using the `src` and `dst` points above to verify that the lines appear parallel in the warped image.
 ![Verifying Perspective Transform](./output_images/Verifying_Perspective_Transform.jpg)
 Fig. Original Image(left) and the warped image using perspective transform (right).
@@ -120,6 +120,7 @@ Fig. Polynomial of degree 2 fitted to show the lane lines detected based on pixe
 The implementation of the method described above is done through two helper functions, namely `hist` and `find_lane_line_pixels` which accepts an image `i` and is implemented in the code cell under the headings "Histogram: Finding the base location of the lane lines in the image" and "Sliding Window: To find the pixels that form the lane lines".
 
 Once I have collected the pixels that form the two lane lines. I use a 2nd order polynomial fit using `fit_poly` function. Another image is shown below which uses the lane lines jsut after the polynomial fit to the activated pixesl obtained in the first sliding window and then searching around the lane lines which is in some sense a more informed search rather than repeating the whole process again.
+
 ![Polyfitted Lane Lines](./output_images/Lane_Lines_Window_test_image_3.jpg)
 Fig. Lane Lines detected without repeating the sliding window method.
 
