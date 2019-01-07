@@ -105,6 +105,7 @@ This resulted in the following source and destination points:
 The warped image is shown below:
 
 ![Perspective Transform](./output_images/Perspective_Transform_Combined_All_test_image_3.jpg)
+
 Fig. Warped Binary Image
 
 I verified that my perspective transform was working as expected by plotting the warped and the original image together using the `src` and `dst` points above to verify that the lines appear parallel in the warped image.
@@ -126,6 +127,7 @@ The implementation of the method described above is done through two helper func
 Once I have collected the pixels that form the two lane lines. I use a 2nd order polynomial fit using `fit_poly` function. Another image is shown below which uses the lane lines jsut after the polynomial fit to the activated pixesl obtained in the first sliding window and then searching around the lane lines which is in some sense a more informed search rather than repeating the whole process again.
 
 ![Polyfitted Lane Lines](./output_images/Lane_Lines_Window_test_image_3.jpg)
+
 Fig. Lane Lines detected without repeating the sliding window method.
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
@@ -141,7 +143,7 @@ Up untill this point, we have the location of the lane lines in the entire image
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I have implemented this step in the code cell under the heading "Displaying back on the image"  and I also wrote another helper function under the heading "Pipeline for a single image" as `process_image` which takes in an image `img` and applies the whole process we have discussed so far to produces a final output image. Here is an example of my result on a test image:
 
 ![Displaying Final Result](./output_images/Displaying_Final_Result_test_image_5.jpg)
 
